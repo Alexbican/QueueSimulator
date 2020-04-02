@@ -1,94 +1,108 @@
 package PT2020.demo.Tema2;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
-import java.util.Random;
-
 
 public class Queue implements Runnable {
-
-	private List<Client> clients = new ArrayList<Client>();
-
+	
 	private int max_service_time;
 	private int min_service_time;
 	private int max_arrival_time;
 	private int min_arrival_time;
 	private int nrClienti;
-	private int nrCozi;
-	private int timpSimulare;
+	private int simulationTime;
+
+	private List<Client> clients = new ArrayList<Client>();
 
 	public Queue() {
 
 	}
 	
-	public List<Client> getList() {
-		return this.clients;
+	public Queue(int nrClienti,int simulationTime,int min_arrival_time,int max_arrival_time,int min_service_time,int max_service_time) {
+        this.nrClienti=nrClienti;
+        this.simulationTime=simulationTime;
+        this.min_arrival_time=min_arrival_time;
+        this.max_arrival_time=max_arrival_time;
+        this.min_service_time=min_service_time;
+        this.max_service_time=max_service_time;
 	}
 
-	public void addClients(Client c) {
-
-		clients.add(c);
+	public List<Client> getList() {
+		return this.clients;
 	}
 
 	public Client getClient(int index) {
 
 		return clients.get(index);
 	}
+	
+	// metoda de generare a timpiilor
+	public Client generateClient(int id) {
+		Random rand = new Random();
+		int serviceTime = rand.nextInt(max_service_time - min_service_time) + min_service_time;
+		int arrivalTime = rand.nextInt(max_arrival_time - min_arrival_time) + min_arrival_time;
+		return new Client(id, arrivalTime, serviceTime);
 
+	}
+
+	// metoda de adaugare in coada a clientilor
+	public void generateClients() {
+		for (int i = 0; i < nrClienti; i++) {
+			Client client = generateClient(i);
+			clients.add(client);
+		}
+	}
+
+	// sorteaza clienti
+	public void SortClients() {
+		Collections.sort(clients);
+	}
+	
+	public List<Client> getClients() {
+		return clients;
+	}
+	
+	
 	public int getSize() {
 		return clients.size();
 	}
 
-	public void readFile(String fileName) {
-		try {
-			File file = new File(fileName);
-			Scanner s = new Scanner(file);
+	// stergerea unui client din program
+	public void removeClient(Client c) {
+		clients.remove(c);
+	}
 
-			String data = s.nextLine();
-			nrClienti = Integer.parseInt(data);
-
-			String data1 = s.nextLine();
-			nrCozi = Integer.parseInt(data1);
-
-			String data2 = s.nextLine();
-			timpSimulare = Integer.parseInt(data2);
-
-			String data3 = s.nextLine();
-			String[] arrival = data3.split(",");
-			min_arrival_time = Integer.parseInt(arrival[0]);
-			max_arrival_time = Integer.parseInt(arrival[1]);
-
-			String data4 = s.nextLine();
-			String[] service = data4.split(",");
-			min_service_time = Integer.parseInt(service[0]);
-			max_service_time = Integer.parseInt(service[0]);
-
-			s.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("Error");
-			e.printStackTrace();
+	// verificam daca coada este goala
+	public boolean emptyQueue() {
+		if (this.clients.isEmpty()) {
+			return true;
 		}
-    }
-	
-	public Client generateClient(int id) {
-		Random rand =new Random();
-		int serviceTime=rand.nextInt(max_service_time-min_service_time)+min_service_time;
-		int arrivalTime=rand.nextInt(max_arrival_time-min_arrival_time)+min_arrival_time;
-		return new Client(id,arrivalTime,serviceTime);
+		return false;
 	}
 	
-	public String toString() {
-		
-		return "Numarul de clienti:" +nrClienti+ " \nNumarul de cozi:" +nrCozi+ "\nTimp de simulare:" +timpSimulare
-				+"\nTimp minim arrival:"+ min_arrival_time +"\nTimp maxim arrival:"+max_arrival_time 
-			    +"\nTimp minim service:"+ min_service_time +"\nTimp maxim service:"+max_service_time;
+	
+
+
+	// aflam lunfimea cozii
+	public int getQueueSize() {
+		return nrClienti;
 	}
 
-	
+	// metoda de afisare
+	public String toString() {
+
+		String message = new String();
+		for (Client c : clients) {
+			message = message + c.toString() + "\n";
+		}
+
+		return message + "\nNumarul de clienti:" + nrClienti  + "\nTimp de simulare:"
+				+ simulationTime + "\nTimp minim arrival:" + min_arrival_time + "\nTimp maxim arrival:" + max_arrival_time
+				+ "\nTimp minim service:" + min_service_time + "\nTimp maxim service:" + max_service_time
+				+ "\nlungimea listei:" + clients.size();
+	}
 
 	public void run() {
 
