@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Queue implements Runnable {
-	
+public class Queue {
+
 	private int max_service_time;
 	private int min_service_time;
 	private int max_arrival_time;
@@ -19,14 +19,15 @@ public class Queue implements Runnable {
 	public Queue() {
 
 	}
-	
-	public Queue(int nrClienti,int simulationTime,int min_arrival_time,int max_arrival_time,int min_service_time,int max_service_time) {
-        this.nrClienti=nrClienti;
-        this.simulationTime=simulationTime;
-        this.min_arrival_time=min_arrival_time;
-        this.max_arrival_time=max_arrival_time;
-        this.min_service_time=min_service_time;
-        this.max_service_time=max_service_time;
+
+	public Queue(int nrClienti, int simulationTime, int min_arrival_time, int max_arrival_time, int min_service_time,
+			int max_service_time) {
+		this.nrClienti = nrClienti;
+		this.simulationTime = simulationTime;
+		this.min_arrival_time = min_arrival_time;
+		this.max_arrival_time = max_arrival_time;
+		this.min_service_time = min_service_time;
+		this.max_service_time = max_service_time;
 	}
 
 	public List<Client> getList() {
@@ -37,7 +38,7 @@ public class Queue implements Runnable {
 
 		return clients.get(index);
 	}
-	
+
 	// metoda de generare a timpiilor
 	public Client generateClient(int id) {
 		Random rand = new Random();
@@ -59,12 +60,11 @@ public class Queue implements Runnable {
 	public void SortClients() {
 		Collections.sort(clients);
 	}
-	
+
 	public List<Client> getClients() {
 		return clients;
 	}
-	
-	
+
 	public int getSize() {
 		return clients.size();
 	}
@@ -81,9 +81,6 @@ public class Queue implements Runnable {
 		}
 		return false;
 	}
-	
-	
-
 
 	// aflam lunfimea cozii
 	public int getQueueSize() {
@@ -98,14 +95,10 @@ public class Queue implements Runnable {
 			message = message + c.toString() + "\n";
 		}
 
-		return message + "\nNumarul de clienti:" + nrClienti  + "\nTimp de simulare:"
-				+ simulationTime + "\nTimp minim arrival:" + min_arrival_time + "\nTimp maxim arrival:" + max_arrival_time
+		return message + "\nNumarul de clienti:" + nrClienti + "\nTimp de simulare:" + simulationTime
+				+ "\nTimp minim arrival:" + min_arrival_time + "\nTimp maxim arrival:" + max_arrival_time
 				+ "\nTimp minim service:" + min_service_time + "\nTimp maxim service:" + max_service_time
 				+ "\nlungimea listei:" + clients.size();
-	}
-
-	public void run() {
-
 	}
 
 }

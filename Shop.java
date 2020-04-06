@@ -14,6 +14,7 @@ public class Shop {
 		this.c=c;
 		c.setStartTime(testSimulare);
 	}
+	
 	public boolean isReady(int timpSimulare) {
 		if(c==null)
 			return true;

@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 public class MainClass {
 
@@ -20,9 +23,11 @@ public class MainClass {
 	private static int time;
 	private static List<Client> clients = new ArrayList<Client>();
 	// private static List<Queue> q = new ArrayList<Queue>();
-	private static List<Shop> shops = new ArrayList<Shop>();
+	private static ArrayList<Shop> shops = new ArrayList<Shop>();
 	private static Shop p;
 	private static Queue q;
+	
+	private static ExecutorService executor;  
 
 	// metoda de citire din fisier
 	public static void readFile(String fileName) {
@@ -56,59 +61,8 @@ public class MainClass {
 		}
 	}
 
-	public static Shop GetAvailableShop() {
-		for (Shop s : shops) {
-			if (s.isOpen()) {
-				return s;
-			}
-		}
-		return null;
-	}
 
-	public static void Check() {
-
-		for (time = 0; time < simulationTime; time++) {
-
-			for (Shop s : shops) {
-				if (s.isReady(time)) {
-					s.closeShop();
-
-					System.out.println(s);
-
-				}
-			}
-
-			System.out.println("timpul este  " + time);
-
-			for (Client c : q.getClients()) {
-				// System.out.println("testeaza clientul" +c.toString()+ "la timpul"+time);
-				if (c.getStartTime() == 0) {
-					if (c.getTarrival() <= time) {
-						Shop shop1 = GetAvailableShop();
-						if (shop1 != null) {
-							shop1.openShop(c, time);
-
-							System.out.println("este randul clientului " + c);
-
-						}
-
-						// p.openShop(c);
-					}
-				}
-
-			}
-			System.out.println("\n");
-
-			// if(c.getTservice()!=0) {
-			// c.subTservice1();
-			// }
-
-			// if(c.getTservice()==0) {
-			// p.closeShop();
-			// }
-
-		}
-	}
+	
 
 	public static void main(String[] args) {
 
@@ -127,7 +81,14 @@ public class MainClass {
 		}
 		q.generateClients();
 		q.SortClients();
-		Check();
+		
+		executor = Executors.newFixedThreadPool(nrCozi);
+		
+		Manager object = new Manager(simulationTime, shops, q,executor);
+		object.start();
+		
+	
+		
 		// System.out.println(q);
 
 	}

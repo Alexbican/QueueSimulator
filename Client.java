@@ -1,10 +1,10 @@
 package PT2020.demo.Tema2;
 
-public class Client implements Comparable<Client> {
+public class Client implements Comparable {
 	private int id;
 	private int serviceTime;
 	private int arrivalTime;
-	private int startTimeShop;////fac un set
+	private int startTimeShop;
 
 	public Client(int id, int arrivalTime, int serviceTime) {
 		this.id = id;
@@ -23,7 +23,6 @@ public class Client implements Comparable<Client> {
 	public int getTservice() {
 		return serviceTime;
 	}
-	
 	
 	public void subTservice1() {
 		 serviceTime--;
@@ -56,6 +55,11 @@ public class Client implements Comparable<Client> {
 	// metoda de afisare
 	public String toString() {
 		return "Clientul cu id:" + id + " are tarrival:" + getTarrival() + " si tservice:" + getTservice();
+	}
+
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
